@@ -1,0 +1,32 @@
+name: TextCommands
+version: '${project.version}'
+main: org.s1queence.plugin.TextCommands
+api-version: '1.18'
+commands:
+  textcommands:
+    usage: /textcommands <action>
+    permission: op
+    aliases:
+      - tcs
+  me:
+    usage: /me <action>
+  do:
+    usage: /do <do>
+  try:
+    usage: /do <try>
+  foradmins:
+    usage: /foradmins <msg>
+    aliases:
+      - fa
+  trouble:
+    usage: /trouble <trouble>
+  anonsay:
+    permission: st.perms.anonsay
+    usage: /anonsay <msg>
+    aliases:
+      - as
+  anonsilentsay:
+    permission: s1.perms.anonsay
+    usage: /anonsilentsay <msg>
+    aliases:
+      - ass
