@@ -1,4 +1,8 @@
-# пермишен для админских логов (после того как игрок использовал команду) - s1.perms.log
+# Permissions
+# tc.perms.reload - reload plugin.
+# tc.perms.log - пермишен для админских логов (после того как игрок использовал команду)
+# tc.perms.anonsay - позволяет использовать команды anonsay и anonsilentsay
+
 commands_enabler:
   me: true # Команда /me - действие, которое другие игроки видят только в радиусе 25 блоков. Пермишен для того, чтобы игнорировать ограничение по дистанци: st.perms.log
   try: true # Команда /try - успешное/неуспешное действие
@@ -8,3 +12,11 @@ commands_enabler:
   anonsilentsay: true  # Команда /anonsilentsay, но не unkown_message - отправляет конкретному игроку сообщение в чат, без указания отправителя (с поддержкой цветовых кодов, через &)
   trouble: true # Команда /trouble_command - внешнее описание кого-либо, чего-либо
   foradmins: true # Комадна /foradmins - сообщение, для всех администраторов (можно использовать для bug-reportoв, чтобы их сразу исправляли и т.д) (пермишен st.perms.log)
+
+sound: # none, если хочешь отключить конкретный звук
+  anonsilentsay: "none"
+  anonsay: "none"
+  me: "none"
+  do: "none"
+  try: "none"
+  trouble: "none"

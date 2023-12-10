@@ -1,0 +1,39 @@
+# Special:
+# %plugin% - чтобы вставить название плагина.
+# %username% - чтобы вставить имя игрока.
+# %content% - всё содержимое команды (обязательно вписывать, чтобы в командах вообще был какой-то толк).
+# %result% - только для try
+
+enable_msg: "%plugin% &aБыл включен!"
+disable_msg: "%plugin% &cБыл выключен!"
+reload_msg: "%plugin% &eКонфиг был обновлён!"
+no_perm: "&cНет прав!"
+command_disabled_msg: "&cКоманда выключена!"
+only_reload_msg: "&cИз аргументов этой команды доступен только &ereload&c!"
+player_not_found: "&cИгрок не найден"
+
+anonsilentsay:
+  no_one_saw_msg: "&7Никто этого не увидел..."
+  sender_msg: "<&7Вы -> &c%username%&7>: &f%content%"
+  player_msg: "&f%content%"
+
+me:
+  msg_for_sender: "&6* &f%username% &6» &f%content%"
+  msg_for_another_players: "&6* &7%username% &6» &7%content%"
+
+do:
+  msg_for_sender: "&6^ &f%username% &6» &f%content%"
+  msg_for_another_players: "&6^ &7%username% &6» &7%content%"
+
+try:
+  result_positive: "&7(&2Успешно&7)"
+  result_negative: "&7(&4Неуспешно&7)"
+  msg_for_sender: "&6% &f%username% &6» &f%content% %result%"
+  msg_for_another_players: "&6% &7%username% &6» &7%content% %result%"
+
+trouble:
+  msg_for_sender: "&6! &f%username% &6» &f%content%"
+  msg_for_another_players: "&6! &7%username% &6» &7%content%"
+
+foradmins:
+  sender_msg: "&2Администрация была уведомлена!&7Ждите..."

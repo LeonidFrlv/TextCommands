@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static org.s1queence.api.S1TextUtils.consoleLog;
+import static org.s1queence.plugin.util.TextUtils.getTextFromTextConfig;
 
 public final class TextCommands extends JavaPlugin implements CommandExecutor {
     private boolean me_command;
@@ -25,16 +26,18 @@ public final class TextCommands extends JavaPlugin implements CommandExecutor {
     private boolean anonsay_command;
     private boolean anonsilentsay_command;
     private YamlDocument commandOptionsCfg;
+    private YamlDocument textCfg;
 
     @Override
     public void onEnable() {
         try {
             commandOptionsCfg = YamlDocument.create(new File(getDataFolder(), "commands.options.yml"), Objects.requireNonNull(getResource("commands.options.yml")));
+            textCfg = YamlDocument.create(new File(getDataFolder(), "text.yml"), Objects.requireNonNull(getResource("text.yml")));
         } catch (IOException ignored) {
 
         }
 
-        consoleLog("[" + ChatColor.GOLD + "TextCommands" + ChatColor.WHITE + "] " + ChatColor.GREEN + "Был включен!", this);
+        consoleLog( getTextFromTextConfig("enable_msg", this), this);
 
         Objects.requireNonNull(getServer().getPluginCommand("me")).setExecutor(new RpCommands(this));
         Objects.requireNonNull(getServer().getPluginCommand("do")).setExecutor(new RpCommands(this));
@@ -59,14 +62,24 @@ public final class TextCommands extends JavaPlugin implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length != 1) return false;
         if (!args[0].equalsIgnoreCase("reload")) {
-            sender.sendMessage(ChatColor.RED + "Из аргументов этой команды доступен только reload!");
+            sender.sendMessage(ChatColor.RED + getTextFromTextConfig("only_reload_msg", this));
             return true;
+        }
+
+        if (sender instanceof Player) {
+            if (!sender.hasPermission("tc.perms.reload")) {
+                sender.sendMessage(getTextFromTextConfig("no_perm", this));
+                return true;
+            }
         }
 
         try {
             File commandOptionsCfgFile = new File(getDataFolder(), "commands.options.yml");
+            File textCfgFile = new File(getDataFolder(), "text.yml");
             if (!commandOptionsCfgFile.exists()) commandOptionsCfg = YamlDocument.create(new File(getDataFolder(), "commands.options.yml"), Objects.requireNonNull(getResource("commands.options.yml")));
+            if (!textCfgFile.exists()) textCfg = YamlDocument.create(new File(getDataFolder(), "text.yml"), Objects.requireNonNull(getResource("text.yml")));
             commandOptionsCfg.reload();
+            textCfg.reload();
         } catch (IOException ignored) {
 
         }
@@ -79,7 +92,7 @@ public final class TextCommands extends JavaPlugin implements CommandExecutor {
         trouble_command = commandOptionsCfg.getBoolean("commands_enabler.trouble");
         foradmins_command = commandOptionsCfg.getBoolean("commands_enabler.foradmins");
 
-        String reloadMsg = "[" + ChatColor.GOLD + "TextCommands" + ChatColor.WHITE + "] " + ChatColor.YELLOW + "Конфиг обновлён!";
+        String reloadMsg = getTextFromTextConfig("reload_msg", this);
         consoleLog(reloadMsg, this);
         if (sender instanceof Player) sender.sendMessage(reloadMsg);
         return true;
@@ -87,8 +100,11 @@ public final class TextCommands extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onDisable() {
-        consoleLog("[" + ChatColor.GOLD + "TextCommands" + ChatColor.WHITE + "] " + ChatColor.RED + "Был выключен!", this);
+        consoleLog( getTextFromTextConfig("disable_msg", this), this);
     }
+
+    public YamlDocument getTextConfig() {return textCfg;}
+    public YamlDocument getCommandOptionsCfg() {return commandOptionsCfg;}
 
     public boolean isDoCommand() {return do_command;}
     public boolean isMeCommand() {return me_command;}
