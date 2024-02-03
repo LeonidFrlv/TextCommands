@@ -5,7 +5,8 @@ api-version: '1.18'
 depend: [S1queenceLib]
 commands:
   textcommands:
-    usage: /textcommands <action>
+    usage: /textcommands reload
+    permission: tc.perms.reload
     aliases:
       - tcs
   me:
@@ -22,9 +23,11 @@ commands:
     usage: /trouble <trouble>
   anonsay:
     usage: /anonsay <msg>
+    permission: tc.perms.anonsay
     aliases:
       - as
   anonsilentsay:
     usage: /anonsilentsay <player> <msg>
+    permission: tc.perms.anonsay
     aliases:
       - ass

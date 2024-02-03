@@ -11,9 +11,9 @@ import org.s1queence.plugin.TextCommands;
 import java.util.Collection;
 import java.util.List;
 
+import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
 import static org.s1queence.api.S1TextUtils.getTextWithInsertedPlayerName;
 import static org.s1queence.api.S1Utils.notifyAdminsAboutCommand;
-import static org.s1queence.plugin.util.TextUtils.getTextFromTextConfig;
 import static org.s1queence.plugin.util.TextUtils.getTextWithInsertedTextContent;
 
 public class RpCommands implements CommandExecutor {
@@ -25,6 +25,7 @@ public class RpCommands implements CommandExecutor {
         if (args.length == 0) return false;
         Player player = (Player) sender;
         List<Entity> nearbyEntities = player.getNearbyEntities(25.0d, 25.0d, 12.0d);
+        String commandDisabledMsg = getConvertedTextFromConfig(plugin.getTextConfig(), "command_disabled_msg", plugin.getName());
 
         StringBuilder msg = new StringBuilder();
         for (String s1 : args) {
@@ -32,31 +33,32 @@ public class RpCommands implements CommandExecutor {
         }
 
         String commandName = command.getName().toLowerCase();
-        String senderMsg = getTextWithInsertedTextContent(getTextWithInsertedPlayerName(getTextFromTextConfig( commandName + ".msg_for_sender", plugin), sender.getName()), msg.toString());
-        String msgForAnotherPlayers = getTextWithInsertedTextContent(getTextWithInsertedPlayerName(getTextFromTextConfig( commandName + ".msg_for_another_players", plugin), sender.getName()), msg.toString());
+
+        String senderMsg = getTextWithInsertedTextContent(getTextWithInsertedPlayerName(getConvertedTextFromConfig(plugin.getTextConfig(), commandName + ".msg_for_sender", plugin.getName()), sender.getName()), msg.toString());
+        String msgForAnotherPlayers = getTextWithInsertedTextContent(getTextWithInsertedPlayerName(getConvertedTextFromConfig(plugin.getTextConfig(), commandName + ".msg_for_another_players", plugin.getName()), sender.getName()), msg.toString());
 
         Collection<? extends Player> onlinePlayers = plugin.getServer().getOnlinePlayers();
 
         if (commandName.equals("me")) {
             if (!plugin.isMeCommand()) {
-                player.sendMessage(getTextFromTextConfig("command_disabled_msg", plugin));
+                player.sendMessage(commandDisabledMsg);
                 return true;
             }
         }
 
         if (commandName.equals("do")) {
             if (!plugin.isDoCommand()) {
-                player.sendMessage(getTextFromTextConfig("command_disabled_msg", plugin));
+                player.sendMessage(commandDisabledMsg);
                 return true;
             }
         }
 
         if (commandName.equals("try")) {
             if (!plugin.isTryCommand()) {
-                player.sendMessage(getTextFromTextConfig("command_disabled_msg", plugin));
+                player.sendMessage(commandDisabledMsg);
                 return true;
             }
-            String resultText = (int)(Math.random() * 2) == 1 ? getTextFromTextConfig("try.result_positive", plugin) : getTextFromTextConfig("try.result_negative", plugin);
+            String resultText = (int)(Math.random() * 2) == 1 ? getConvertedTextFromConfig(plugin.getTextConfig(), "try.result_positive", plugin.getName()) : getConvertedTextFromConfig(plugin.getTextConfig(), "try.result_negative", plugin.getName());
             senderMsg = senderMsg.replace("%result%", resultText);
             msgForAnotherPlayers = msgForAnotherPlayers.replace("%result%", resultText);
         }
@@ -64,17 +66,17 @@ public class RpCommands implements CommandExecutor {
 
         if (commandName.equals("trouble")) {
             if (!plugin.isTroubleCommand()) {
-                player.sendMessage(getTextFromTextConfig("command_disabled_msg", plugin));
+                player.sendMessage(commandDisabledMsg);
                 return true;
             }
         }
 
         if (commandName.equals("foradmins")) {
             if (!plugin.isForAdminsCommand()) {
-                player.sendMessage(getTextFromTextConfig("command_disabled_msg", plugin));
+                player.sendMessage(commandDisabledMsg);
                 return true;
             }
-            player.sendMessage(getTextFromTextConfig("foradmins.sender_msg", plugin));
+            player.sendMessage(getConvertedTextFromConfig(plugin.getTextConfig(), "foradmins.sender_msg", plugin.getName()));
             notifyAdminsAboutCommand(onlinePlayers, command.getName(), msg.toString(), player.getName(), null);
             return true;
         }
@@ -90,7 +92,6 @@ public class RpCommands implements CommandExecutor {
             Player p = (Player) entity;
             if (p.hasPermission("tc.perms.log")) continue;
             p.sendMessage(msgForAnotherPlayers);
-            p.playSound(p.getLocation(), "custom.subtitle_sound", 1.0f, 1.0f);
             String sound = plugin.getCommandOptionsCfg().getString("sound." + commandName);
             if (sound != null && !sound.equalsIgnoreCase("none")) p.playSound(p.getLocation(), sound, 1.0f, 1.0f);
         }

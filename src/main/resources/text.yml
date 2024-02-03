@@ -7,9 +7,7 @@
 enable_msg: "%plugin% &aБыл включен!"
 disable_msg: "%plugin% &cБыл выключен!"
 reload_msg: "%plugin% &eКонфиг был обновлён!"
-no_perm: "&cНет прав!"
 command_disabled_msg: "&cКоманда выключена!"
-only_reload_msg: "&cИз аргументов этой команды доступен только &ereload&c!"
 player_not_found: "&cИгрок не найден"
 
 anonsilentsay:

@@ -1,7 +1,5 @@
 package org.s1queence.plugin;
 
-import dev.dejvokep.boostedyaml.YamlDocument;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,13 +7,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.s1queence.plugin.commands.*;
+import org.s1queence.plugin.libs.YamlDocument;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
 import static org.s1queence.api.S1TextUtils.consoleLog;
-import static org.s1queence.plugin.util.TextUtils.getTextFromTextConfig;
+import static org.s1queence.api.S1TextUtils.getConvertedTextFromConfig;
 
 public final class TextCommands extends JavaPlugin implements CommandExecutor {
     private boolean me_command;
@@ -36,9 +35,6 @@ public final class TextCommands extends JavaPlugin implements CommandExecutor {
         } catch (IOException ignored) {
 
         }
-
-        consoleLog( getTextFromTextConfig("enable_msg", this), this);
-
         Objects.requireNonNull(getServer().getPluginCommand("me")).setExecutor(new RpCommands(this));
         Objects.requireNonNull(getServer().getPluginCommand("do")).setExecutor(new RpCommands(this));
         Objects.requireNonNull(getServer().getPluginCommand("try")).setExecutor(new RpCommands(this));
@@ -55,23 +51,15 @@ public final class TextCommands extends JavaPlugin implements CommandExecutor {
         anonsilentsay_command = commandOptionsCfg.getBoolean("commands_enabler.anonsilentsay");
         trouble_command = commandOptionsCfg.getBoolean("commands_enabler.trouble");
         foradmins_command = commandOptionsCfg.getBoolean("commands_enabler.foradmins");
+
+        consoleLog(getConvertedTextFromConfig(textCfg, "enable_msg", getName()), this);
     }
 
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length != 1) return false;
-        if (!args[0].equalsIgnoreCase("reload")) {
-            sender.sendMessage(ChatColor.RED + getTextFromTextConfig("only_reload_msg", this));
-            return true;
-        }
-
-        if (sender instanceof Player) {
-            if (!sender.hasPermission("tc.perms.reload")) {
-                sender.sendMessage(getTextFromTextConfig("no_perm", this));
-                return true;
-            }
-        }
+        if (!args[0].equalsIgnoreCase("reload")) return false;
 
         try {
             File commandOptionsCfgFile = new File(getDataFolder(), "commands.options.yml");
@@ -92,7 +80,7 @@ public final class TextCommands extends JavaPlugin implements CommandExecutor {
         trouble_command = commandOptionsCfg.getBoolean("commands_enabler.trouble");
         foradmins_command = commandOptionsCfg.getBoolean("commands_enabler.foradmins");
 
-        String reloadMsg = getTextFromTextConfig("reload_msg", this);
+        String reloadMsg = getConvertedTextFromConfig(textCfg, "reload_msg", getName());
         consoleLog(reloadMsg, this);
         if (sender instanceof Player) sender.sendMessage(reloadMsg);
         return true;
@@ -100,7 +88,7 @@ public final class TextCommands extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onDisable() {
-        consoleLog( getTextFromTextConfig("disable_msg", this), this);
+        consoleLog(getConvertedTextFromConfig(textCfg, "disable_msg", getName()), this);
     }
 
     public YamlDocument getTextConfig() {return textCfg;}
