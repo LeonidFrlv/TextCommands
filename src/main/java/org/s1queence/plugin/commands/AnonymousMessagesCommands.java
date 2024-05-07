@@ -25,14 +25,18 @@ public class AnonymousMessagesCommands implements CommandExecutor {
         Player player = (Player) sender;
 
         if (args.length == 0) return false;
+
+        boolean isAnonSay = command.getName().equalsIgnoreCase("anonsay");
+        boolean isAnonSilentSay = command.getName().equalsIgnoreCase("anonsilentsay");
+
         StringBuilder msg = new StringBuilder();
-        for (int i = 1; i < args.length; i++) {
+        for (int i = isAnonSay ? 0 : 1; i < args.length; i++) {
             msg.append(args[i]).append(" ");
         }
 
         msg = new StringBuilder(ChatColor.translateAlternateColorCodes('&', msg.toString()));
 
-        if (command.getName().equalsIgnoreCase("anonsay")) {
+        if (isAnonSay) {
             if (!plugin.isAnonSayCommand()) {
                 player.sendMessage(getConvertedTextFromConfig(plugin.getTextConfig(), "command_disabled_msg", plugin.getName()));
                 return true;
@@ -59,7 +63,7 @@ public class AnonymousMessagesCommands implements CommandExecutor {
             return true;
         }
 
-        if (command.getName().equalsIgnoreCase("anonsilentsay")) {
+        if (isAnonSilentSay) {
             if (!plugin.isAnonSilentSayCommand()) {
                 player.sendMessage(getConvertedTextFromConfig(plugin.getTextConfig(), "command_disabled_msg", plugin.getName()));
                 return true;
