@@ -43,7 +43,7 @@
             <artifactId>s1queencelib</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>C:/Users/Denis/Desktop/121testserver/plugins/S1queenceLib-1.0-1.21.1.jar</systemPath>
+            <systemPath>C:/Users/Denis/Desktop/121PaperTestServer/plugins/S1queenceLib-1.0-1.21.1.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -79,7 +79,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <outputDirectory>C:/Users/Denis/Desktop/121PaperTestServer/plugins/</outputDirectory>
                     <!-- your outputDirectory -->
                 </configuration>
             </plugin>
